@@ -1,11 +1,11 @@
-use crate::*;
+use crate::types;
 
 use std::process::{Command, Stdio};
 
 use futures::{Future, Stream};
 use tokio_process::{Child, CommandExt};
 
-pub fn execute_command(cmd: &Cmd, stdin: Option<Stdio>, stdout: Option<Stdio>) {
+pub fn spawn_cmd(cmd: &types::Cmd, stdin: Option<Stdio>, stdout: Option<Stdio>) {
     let mut cmd_proc = Command::new(&cmd.exec);
 
     if let Some(ref args) = cmd.args {
@@ -42,11 +42,13 @@ pub fn execute_command(cmd: &Cmd, stdin: Option<Stdio>, stdout: Option<Stdio>) {
     tokio::run(future)
 }
 
-pub fn interpret_config(config: &Config) {
+pub fn interpret_config(config: &types::Config) {
+
+    if pipe
     let stdin = Some(Stdio::inherit());
 
     for cmd in &config.depends {
         // execute_command(&cmd, stdin.clone(), stdout.clone());
-        execute_command(&cmd, None, None);
+        spawn_cmd(&cmd, None, None);
     }
 }
